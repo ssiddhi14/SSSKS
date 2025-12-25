@@ -389,7 +389,7 @@
         </div>
     </div>
 
-    <a href="page2.html" class="bottom-link">56वां वार्षिक उत्सव
+    <a href="letter.html" class="bottom-link">56वां वार्षिक उत्सव
     <br>    (click here)  
     </a>
 
@@ -490,7 +490,8 @@
             }
         }
 
-        window.addEventListener('load', () => {
+        // Function to initialize page
+        function initializePage() {
             // Start typewriter effect
             setTimeout(typeWriter, 500);
 
@@ -572,7 +573,14 @@
 
             // Create floating spiritual particles
             createSpiritualParticles();
-        });
+        }
+
+        // Listen to both events to ensure page loads properly
+        // DOMContentLoaded fires when HTML is parsed (works for navigation)
+        document.addEventListener('DOMContentLoaded', initializePage);
+        
+        // load event fires when all resources are loaded (works for direct access)
+        window.addEventListener('load', initializePage);
 
         // Play/Pause button control
         playPauseBtn.addEventListener('click', () => {
