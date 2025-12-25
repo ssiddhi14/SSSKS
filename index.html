@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHREE SHYAMSEWAK AKLYAN SANG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f3e8 0%, #e8e4d9 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .spiritual-heading {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #8b4513;
+            text-shadow: 0 2px 8px rgba(139, 69, 19, 0.2);
+            letter-spacing: 2px;
+            z-index: 100;
+            white-space: nowrap;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+        }
+
+        .spiritual-heading::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
+        }
+
+        .spiritual-heading.typing-complete::after {
+            display: none;
+        }
+
+        .bottom-link {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #8b4513;
+            text-shadow: 0 2px 6px rgba(139, 69, 19, 0.15);
+            letter-spacing: 1px;
+            z-index: 100;
+            text-decoration: none;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            transition: all 0.4s ease;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .bottom-link:hover {
+            color: #a0522d;
+            text-shadow: 0 3px 10px rgba(139, 69, 19, 0.3);
+            transform: translateX(-50%) translateY(-3px);
+            background: rgba(255, 248, 220, 0.3);
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .photo-container-1 {
+            position: fixed;
+            left: -100%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 200px;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .photo-container-2 {
+            position: fixed;
+            left: -100%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 200px;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .photo-container-3 {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+        }
+
+        .photo-wrapper {
+            width: 200px;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .photo-wrapper-center {
+            width: 300px;
+            height: 380px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .photo-frame {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 8px 30px rgba(139, 69, 19, 0.25);
+            border: 6px solid rgba(255, 248, 220, 0.9);
+            filter: brightness(1.05);
+        }
+
+        .photo-frame-center {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(139, 69, 19, 0.3);
+            border: 8px solid rgba(255, 248, 220, 0.95);
+            filter: brightness(1.05);
+        }
+
+        .glow-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 248, 220, 0.4) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .photo-text {
+            text-align: center;
+            margin-top: 15px;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+        }
+
+        .photo-text .line1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #8b4513;
+            text-shadow: 0 1px 4px rgba(139, 69, 19, 0.15);
+            margin-bottom: 3px;
+        }
+
+        .photo-text .line2 {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #a0522d;
+            text-shadow: 0 1px 3px rgba(139, 69, 19, 0.1);
+            font-style: italic;
+        }
+
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 248, 220, 0.85);
+            padding: 10px 15px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(139, 69, 19, 0.2);
+        }
+
+        .audio-controls button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8b4513;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .audio-controls button:hover {
+            transform: scale(1.15);
+            color: #a0522d;
+        }
+
+        .audio-controls input {
+            width: 100px;
+            accent-color: #8b4513;
+        }
+
+        .floating-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .spiritual-heading {
+                font-size: 1.2rem;
+                top: 20px;
+                padding: 0 10px;
+                text-align: center;
+                letter-spacing: 1px;
+            }
+
+            .bottom-link {
+                font-size: 1.2rem;
+                bottom: 20px;
+                padding: 8px 15px;
+            }
+
+            .photo-container-1 {
+                width: 120px;
+            }
+
+            .photo-container-2 {
+                width: 120px;
+            }
+
+            .photo-container-3 {
+                width: 180px;
+            }
+
+            .photo-wrapper {
+                width: 120px;
+                height: 150px;
+            }
+
+            .photo-wrapper-center {
+                width: 180px;
+                height: 230px;
+            }
+
+            .photo-frame {
+                border: 4px solid rgba(255, 248, 220, 0.9);
+            }
+
+            .photo-frame-center {
+                border: 5px solid rgba(255, 248, 220, 0.95);
+            }
+
+            .photo-text .line1 {
+                font-size: 0.85rem;
+                margin-bottom: 2px;
+            }
+
+            .photo-text .line2 {
+                font-size: 0.7rem;
+            }
+
+            .photo-text {
+                margin-top: 10px;
+            }
+
+            .audio-controls {
+                bottom: 70px;
+                right: 15px;
+                padding: 8px 12px;
+            }
+
+            .audio-controls button {
+                font-size: 1.2rem;
+            }
+
+            .audio-controls input {
+                width: 70px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .spiritual-heading {
+                font-size: 0.9rem;
+                letter-spacing: 0.5px;
+            }
+
+            .bottom-link {
+                font-size: 1rem;
+                bottom: 15px;
+                padding: 6px 12px;
+            }
+
+            .photo-container-1 {
+                width: 90px;
+            }
+
+            .photo-container-2 {
+                width: 90px;
+            }
+
+            .photo-container-3 {
+                width: 140px;
+            }
+
+            .photo-wrapper {
+                width: 90px;
+                height: 115px;
+            }
+
+            .photo-wrapper-center {
+                width: 140px;
+                height: 180px;
+            }
+
+            .photo-text .line1 {
+                font-size: 0.7rem;
+            }
+
+            .photo-text .line2 {
+                font-size: 0.6rem;
+            }
+
+            .photo-text {
+                margin-top: 8px;
+            }
+
+            .audio-controls {
+                bottom: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floating-particles" id="particles"></div>
+
+    <h1 class="spiritual-heading" id="spiritualHeading"></h1>
+
+    <div class="photo-container-1" id="photo1Container">
+        <div class="photo-wrapper">
+            <div class="glow-effect"></div>
+            <img src="SB.jpg" class="photo-frame" alt="Photo 1">
+        </div>
+        <div class="photo-text">
+            <div class="line1">श्रीमती आनंदी देवी सारड़ा</div>
+            <div class="line2">(मैयाजी)</div>
+        </div>
+    </div>
+
+    <div class="photo-container-2" id="photo2Container">
+        <div class="photo-wrapper">
+            <div class="glow-effect"></div>
+            <img src="pic8.jpeg" class="photo-frame" alt="Photo 2">
+        </div>
+        <div class="photo-text">
+            <div class="line1">श्री मांगीलालजी सारड़ा</div>
+            <div class="line2">(बाऊजी)</div>
+        </div>
+    </div>
+
+    <div class="photo-container-3" id="photo3Container">
+        <div class="photo-wrapper-center">
+            <img src="BABA.jpeg" class="photo-frame-center" alt="Photo 3">
+        </div>
+    </div>
+
+    <a href="letter.html" class="bottom-link">56वां वार्षिक उत्सव
+    <br>    (click here)  
+    </a>
+
+    <div class="audio-controls">
+        <button id="play-pause">▶️</button>
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
+    </div>
+
+    <audio id="birthday-song" loop>
+        <source src="1and2.mp3" type="audio/mp3">
+    </audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script>
+        const audio = document.getElementById('birthday-song');
+        const playPauseBtn = document.getElementById('play-pause');
+        const volumeControl = document.getElementById('volume');
+        let isPlaying = false;
+
+        // Continuous Music System - Save state before leaving page
+        function saveAudioState() {
+            if (audio && !audio.paused) {
+                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
+                localStorage.setItem('musicIsPlaying', 'true');
+                localStorage.setItem('musicVolume', audio.volume.toString());
+            } else if (audio) {
+                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
+                localStorage.setItem('musicIsPlaying', 'false');
+                localStorage.setItem('musicVolume', audio.volume.toString());
+            }
+        }
+
+        // Load saved audio state
+        function loadAudioState() {
+            const savedTime = localStorage.getItem('musicCurrentTime');
+            const savedIsPlaying = localStorage.getItem('musicIsPlaying');
+            const savedVolume = localStorage.getItem('musicVolume');
+
+            if (savedVolume !== null) {
+                audio.volume = parseFloat(savedVolume);
+                volumeControl.value = savedVolume;
+            } else {
+                audio.volume = 0.5;
+            }
+
+            if (savedTime !== null) {
+                audio.currentTime = parseFloat(savedTime);
+            }
+
+            if (savedIsPlaying === 'true') {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    playPauseBtn.textContent = '⏸️';
+                }).catch(() => {});
+            }
+        }
+
+        // Save state periodically while playing
+        setInterval(() => {
+            if (audio && !audio.paused) {
+                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
+            }
+        }, 1000);
+
+        // Save state before navigation
+        window.addEventListener('beforeunload', saveAudioState);
+        document.querySelector('.bottom-link').addEventListener('click', saveAudioState);
+
+        // Typewriter effect
+        const heading = document.getElementById('spiritualHeading');
+        const text = 'श्री श्याम सेवक कल्याण संघ';
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < text.length) {
+                heading.textContent += text.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 100);
+            } else {
+                heading.classList.add('typing-complete');
+            }
+        }
+
+        window.addEventListener('load', () => {
+            // Start typewriter effect
+            setTimeout(typeWriter, 500);
+
+            // Load saved audio state or start fresh
+            const savedIsPlaying = localStorage.getItem('musicIsPlaying');
+            if (savedIsPlaying !== null) {
+                loadAudioState();
+            } else {
+                // First time - play audio
+                setTimeout(() => {
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        playPauseBtn.textContent = '⏸️';
+                        localStorage.setItem('musicIsPlaying', 'true');
+                    }).catch(() => {});
+                }, 1000);
+            }
+
+            // Animate photo 1: from left to 75% of page width
+            gsap.to('#photo1Container', {
+                left: '75%',
+                duration: 2.5,
+                ease: 'power2.out',
+                delay: 1.5,
+                transform: 'translate(-50%, -50%)'
+            });
+
+            // Animate photo 2: from left to 25% of page width
+            gsap.to('#photo2Container', {
+                left: '25%',
+                duration: 2.5,
+                ease: 'power2.out',
+                delay: 2,
+                transform: 'translate(-50%, -50%)'
+            });
+
+            // Fade in photo 3 (center image)
+            gsap.to('#photo3Container', {
+                opacity: 1,
+                duration: 2,
+                ease: 'power2.inOut',
+                delay: 2.5
+            });
+
+            // Create floating spiritual particles
+            createSpiritualParticles();
+        });
+
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                playPauseBtn.textContent = '▶️';
+                localStorage.setItem('musicIsPlaying', 'false');
+            } else {
+                audio.play();
+                playPauseBtn.textContent = '⏸️';
+                localStorage.setItem('musicIsPlaying', 'true');
+            }
+            isPlaying = !isPlaying;
+        });
+
+        volumeControl.addEventListener('input', () => {
+            audio.volume = volumeControl.value;
+            localStorage.setItem('musicVolume', volumeControl.value);
+        });
+
+        function createSpiritualParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particles = ['✨', '🕉️', '🪷', '⭐'];
+            
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                    particle.style.position = 'absolute';
+                    particle.style.left = Math.random() * 100 + 'vw';
+                    particle.style.top = '-30px';
+                    particle.style.fontSize = Math.random() * 15 + 10 + 'px';
+                    particle.style.opacity = Math.random() * 0.4 + 0.2;
+                    particlesContainer.appendChild(particle);
+
+                    gsap.to(particle, {
+                        y: window.innerHeight + 50,
+                        x: Math.random() * 100 - 50,
+                        rotation: Math.random() * 180,
+                        duration: Math.random() * 10 + 8,
+                        ease: 'linear',
+                        onComplete: () => particle.remove()
+                    });
+                }, i * 300);
+            }
+
+            // Repeat particles
+            setInterval(() => {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                        particle.style.position = 'absolute';
+                        particle.style.left = Math.random() * 100 + 'vw';
+                        particle.style.top = '-30px';
+                        particle.style.fontSize = Math.random() * 15 + 10 + 'px';
+                        particle.style.opacity = Math.random() * 0.4 + 0.2;
+                        particlesContainer.appendChild(particle);
+
+                        gsap.to(particle, {
+                            y: window.innerHeight + 50,
+                            x: Math.random() * 100 - 50,
+                            rotation: Math.random() * 180,
+                            duration: Math.random() * 10 + 8,
+                            ease: 'linear',
+                            onComplete: () => particle.remove()
+                        });
+                    }, i * 300);
+                }
+            }, 8000);
+        }
+    </script>
+</body>
+</html>

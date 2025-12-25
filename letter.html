@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>गरिमामय उपस्थिति</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f3e8 0%, #e8e4d9 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 120px 20px 100px;
+        }
+
+        .spiritual-heading {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            font-weight: 600;
+            color: #8b4513;
+            text-shadow: 0 2px 8px rgba(139, 69, 19, 0.2);
+            letter-spacing: 3px;
+            z-index: 100;
+            white-space: nowrap;
+            font-family: 'Noto Sans Devanagari', 'Mangal', 'Kokila', sans-serif;
+        }
+
+        .images-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 60px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .photo-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .photo-container {
+            width: 300px;
+            height: 380px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(139, 69, 19, 0.3);
+            border: 8px solid rgba(255, 248, 220, 0.95);
+        }
+
+        .mosaic-grid {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            position: relative;
+        }
+
+        .mosaic-tile {
+            width: 100%;
+            height: 100%;
+            background-size: 800% 1000%;
+            opacity: 0;
+            transform: scale(0) rotate(180deg);
+        }
+
+        .photo-caption {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #8b4513;
+            text-align: center;
+            text-shadow: 0 2px 6px rgba(139, 69, 19, 0.15);
+            font-family: 'Noto Sans Devanagari', 'Mangal', 'Kokila', sans-serif;
+            letter-spacing: 1px;
+            line-height: 1.4;
+        }
+
+        .next-page-link {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #8b4513;
+            text-shadow: 0 2px 6px rgba(139, 69, 19, 0.15);
+            letter-spacing: 1px;
+            z-index: 100;
+            text-decoration: none;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            transition: all 0.4s ease;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        .next-page-link:hover {
+            color: #a0522d;
+            text-shadow: 0 3px 10px rgba(139, 69, 19, 0.3);
+            transform: translateX(-50%) translateY(-3px);
+            background: rgba(255, 248, 220, 0.3);
+        }
+
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 248, 220, 0.85);
+            padding: 10px 15px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(139, 69, 19, 0.2);
+        }
+
+        .audio-controls button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8b4513;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .audio-controls button:hover {
+            transform: scale(1.15);
+            color: #a0522d;
+        }
+
+        .audio-controls input {
+            width: 100px;
+            accent-color: #8b4513;
+        }
+
+        .floating-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .images-container {
+                gap: 40px;
+            }
+
+            .photo-container {
+                width: 250px;
+                height: 320px;
+            }
+
+            .photo-caption {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 100px 15px 90px;
+            }
+
+            .spiritual-heading {
+                font-size: 1.8rem;
+                top: 20px;
+                padding: 0 10px;
+                text-align: center;
+                letter-spacing: 2px;
+            }
+
+            .images-container {
+                gap: 50px;
+            }
+
+            .photo-container {
+                width: 220px;
+                height: 280px;
+                border: 5px solid rgba(255, 248, 220, 0.95);
+            }
+
+            .photo-caption {
+                font-size: 1.2rem;
+            }
+
+            .next-page-link {
+                font-size: 1.4rem;
+                bottom: 20px;
+                padding: 8px 15px;
+            }
+
+            .audio-controls {
+                bottom: 70px;
+                right: 15px;
+                padding: 8px 12px;
+            }
+
+            .audio-controls button {
+                font-size: 1.2rem;
+            }
+
+            .audio-controls input {
+                width: 70px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 90px 10px 80px;
+            }
+
+            .spiritual-heading {
+                font-size: 1.3rem;
+                letter-spacing: 1px;
+            }
+
+            .images-container {
+                gap: 40px;
+            }
+
+            .photo-container {
+                width: 180px;
+                height: 230px;
+                border: 4px solid rgba(255, 248, 220, 0.95);
+            }
+
+            .photo-caption {
+                font-size: 1rem;
+                letter-spacing: 0.5px;
+            }
+
+            .next-page-link {
+                font-size: 1.2rem;
+                bottom: 15px;
+                padding: 6px 12px;
+            }
+
+            .audio-controls {
+                bottom: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floating-particles" id="particles"></div>
+
+    <h1 class="spiritual-heading">गरिमामय उपस्थिति</h1>
+
+    <div class="images-container">
+        <div class="photo-wrapper">
+            <div class="photo-container" id="photo1Container">
+                <div class="mosaic-grid" id="mosaic1"></div>
+            </div>
+            <div class="photo-caption">श्री मोहनदास जी महाराज</div>
+        </div>
+
+        <div class="photo-wrapper">
+            <div class="photo-container" id="photo3Container">
+                <div class="mosaic-grid" id="mosaic3"></div>
+            </div>
+            <div class="photo-caption">महंत श्री गोपालदास जी महाराज</div>
+        </div>
+
+        <div class="photo-wrapper">
+            <div class="photo-container" id="photo2Container">
+                <div class="mosaic-grid" id="mosaic2"></div>
+            </div>
+            <div class="photo-caption">श्री प्रताप सिंह जी चौहान</div>
+        </div>
+    </div>
+
+    <a href="cake.html" class="next-page-link">Next Page</a>
+
+    <div class="audio-controls">
+        <button id="play-pause">▶️</button>
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
+    </div>
+
+    <audio id="birthday-song" loop>
+        <source src="1and2.mp3" type="audio/mp3">
+    </audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script>
+        const audio = document.getElementById('birthday-song');
+        const playPauseBtn = document.getElementById('play-pause');
+        const volumeControl = document.getElementById('volume');
+        let isPlaying = false;
+
+        // Continuous Music System - Save state before leaving page
+        function saveAudioState() {
+            if (audio && !audio.paused) {
+                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
+                localStorage.setItem('musicIsPlaying', 'true');
+                localStorage.setItem('musicVolume', audio.volume.toString());
+            } else if (audio) {
+                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
+                localStorage.setItem('musicIsPlaying', 'false');
+                localStorage.setItem('musicVolume', audio.volume.toString());
+            }
+        }
+
+        // Load saved audio state
+        function loadAudioState() {
+            const savedTime = localStorage.getItem('musicCurrentTime');
+            const savedIsPlaying = localStorage.getItem('musicIsPlaying');
+            const savedVolume = localStorage.getItem('musicVolume');
+
+            if (savedVolume !== null) {
+                audio.volume = parseFloat(savedVolume);
+                volumeControl.value = savedVolume;
+            } else {
+                audio.volume = 0.5;
+            }
+
+            if (savedTime !== null) {
+                audio.currentTime = parseFloat(savedTime);
+            }
+
+            if (savedIsPlaying === 'true') {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    playPauseBtn.textContent = '⏸️';
+                }).catch(() => {});
+            }
+        }
+
+        // Save state periodically while playing
+        setInterval(() => {
+            if (audio && !audio.paused) {
+                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
+            }
+        }, 1000);
+
+        // Save state before navigation
+        window.addEventListener('beforeunload', saveAudioState);
+        const nextPageLink = document.querySelector('.next-page-link');
+        if (nextPageLink) {
+            nextPageLink.addEventListener('click', saveAudioState);
+        }
+
+        // Image sources
+        const images = {
+            1: 'pic9.jpeg',
+            2: 'pic6.jpeg',
+            3: 'TOCHANGE.jpeg'  //to change 
+        };
+
+        // Create mosaic grid for each image
+        function createMosaicGrid(containerId, imageSrc) {
+            const container = document.getElementById(containerId);
+            const tiles = 80; // 8 columns x 10 rows
+            
+            for (let i = 0; i < tiles; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'mosaic-tile';
+                
+                const row = Math.floor(i / 8);
+                const col = i % 8;
+                
+                tile.style.backgroundImage = `url(${imageSrc})`;
+                tile.style.backgroundPosition = `${col * 100 / 7}% ${row * 100 / 9}%`;
+                
+                container.appendChild(tile);
+            }
+        }
+
+        // Animate mosaic tiles
+        function animateMosaic(containerId, delay) {
+            const container = document.getElementById(containerId);
+            const tiles = container.querySelectorAll('.mosaic-tile');
+            
+            // Create random order for tile animation
+            const indices = Array.from({ length: tiles.length }, (_, i) => i);
+            
+            // Shuffle array for random appearance
+            for (let i = indices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indices[i], indices[j]] = [indices[j], indices[i]];
+            }
+
+            indices.forEach((index, i) => {
+                gsap.to(tiles[index], {
+                    opacity: 1,
+                    scale: 1,
+                    rotation: 0,
+                    duration: 0.4,
+                    delay: delay + (i * 0.015),
+                    ease: 'back.out(1.7)'
+                });
+            });
+        }
+
+        window.addEventListener('load', () => {
+            // Load audio state from previous page
+            loadAudioState();
+
+            // Create mosaic grids
+            createMosaicGrid('mosaic1', images[1]);
+            createMosaicGrid('mosaic2', images[2]);
+            createMosaicGrid('mosaic3', images[3]);
+
+            // Animate mosaics with staggered delays
+            animateMosaic('mosaic1', 0.5);
+            animateMosaic('mosaic3', 1.2);
+            animateMosaic('mosaic2', 1.9);
+
+            // Create floating spiritual particles
+            createSpiritualParticles();
+        });
+
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                playPauseBtn.textContent = '▶️';
+                localStorage.setItem('musicIsPlaying', 'false');
+            } else {
+                audio.play();
+                playPauseBtn.textContent = '⏸️';
+                localStorage.setItem('musicIsPlaying', 'true');
+            }
+            isPlaying = !isPlaying;
+        });
+
+        volumeControl.addEventListener('input', () => {
+            audio.volume = volumeControl.value;
+            localStorage.setItem('musicVolume', volumeControl.value);
+        });
+
+        function createSpiritualParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particles = ['✨', '🕉️', '🪷', '⭐'];
+            
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                    particle.style.position = 'absolute';
+                    particle.style.left = Math.random() * 100 + 'vw';
+                    particle.style.top = '-30px';
+                    particle.style.fontSize = Math.random() * 15 + 10 + 'px';
+                    particle.style.opacity = Math.random() * 0.4 + 0.2;
+                    particlesContainer.appendChild(particle);
+
+                    gsap.to(particle, {
+                        y: window.innerHeight + 50,
+                        x: Math.random() * 100 - 50,
+                        rotation: Math.random() * 180,
+                        duration: Math.random() * 10 + 8,
+                        ease: 'linear',
+                        onComplete: () => particle.remove()
+                    });
+                }, i * 300);
+            }
+
+            // Repeat particles
+            setInterval(() => {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                        particle.style.position = 'absolute';
+                        particle.style.left = Math.random() * 100 + 'vw';
+                        particle.style.top = '-30px';
+                        particle.style.fontSize = Math.random() * 15 + 10 + 'px';
+                        particle.style.opacity = Math.random() * 0.4 + 0.2;
+                        particlesContainer.appendChild(particle);
+
+                        gsap.to(particle, {
+                            y: window.innerHeight + 50,
+                            x: Math.random() * 100 - 50,
+                            rotation: Math.random() * 180,
+                            duration: Math.random() * 10 + 8,
+                            ease: 'linear',
+                            onComplete: () => particle.remove()
+                        });
+                    }, i * 300);
+                }
+            }, 8000);
+        }
+    </script>
+</body>
+</html>

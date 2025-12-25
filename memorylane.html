@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Lane - Special Guests</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f3e8 0%, #e8e4d9 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .floating-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            top: 0;
+            left: 0;
+        }
+
+        .memory-lane-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            margin-top: 2rem;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            color: #8b4513;
+            margin-bottom: 1rem;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            text-shadow: 0 2px 8px rgba(139, 69, 19, 0.2);
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #8b4513;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+            background: rgba(255, 248, 220, 0.5);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.15);
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+        }
+
+        .gallery-container {
+            position: relative;
+            margin: 2rem 0;
+            min-height: 560px;
+            display: flex;
+            align-items: center;
+            padding: 60px 0 60px 30px;
+        }
+
+        .slideshow-controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s forwards 1s;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            margin: 0 0.5rem;
+            background: linear-gradient(45deg, #8b4513, #a0522d);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #a0522d, #8b4513);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+        }
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 1.5rem;
+            padding: 40px 0 30px 20px;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: #8b4513 #f5f3e8;
+            width: 100%;
+            align-items: center;
+        }
+
+        .gallery::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .gallery::-webkit-scrollbar-track {
+            background: #f5f3e8;
+            border-radius: 10px;
+        }
+
+        .gallery::-webkit-scrollbar-thumb {
+            background: #8b4513;
+            border-radius: 10px;
+        }
+
+        .memory-card {
+            flex: 0 0 auto;
+            width: 300px;
+            height: 400px;
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.25);
+            transform: translateY(50px) rotate(var(--rotate, 0deg));
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 8px solid rgba(255, 248, 220, 0.95);
+        }
+
+        .memory-card.visible {
+            transform: translateY(0) rotate(var(--rotate, 0deg));
+            opacity: 1;
+        }
+
+        .memory-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(1.05);
+        }
+
+        .memory-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(139, 69, 19, 0.9);
+            color: white;
+            padding: 1.2rem;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+        }
+
+        .memory-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 50%, rgba(255, 248, 220, 0.2) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .card-tape {
+            position: absolute;
+            width: 100px;
+            height: 35px;
+            background: rgba(255, 248, 220, 0.9);
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%) rotate(var(--rotate, 2deg));
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(139, 69, 19, 0.2);
+        }
+
+        .card-sticker {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            z-index: 3;
+            bottom: 10px;
+            right: 10px;
+            transform: rotate(15deg);
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+            animation: bounce 2s infinite;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+        }
+
+        #nextButton {
+            background: linear-gradient(45deg, #8b4513, #a0522d);
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+        }
+
+        #nextButton::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 248, 220, 0.2);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        #nextButton:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
+        }
+
+        #backButton {
+            background: linear-gradient(45deg, #8b4513, #a0522d);
+        }
+
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 248, 220, 0.85);
+            padding: 10px 15px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(139, 69, 19, 0.2);
+        }
+
+        .audio-controls button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8b4513;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .audio-controls button:hover {
+            transform: scale(1.15);
+            color: #a0522d;
+        }
+
+        .audio-controls input {
+            width: 100px;
+            accent-color: #8b4513;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: scale(1) rotate(15deg);
+            }
+            50% {
+                transform: scale(1.2) rotate(20deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 10px 25px rgba(139, 69, 19, 0.4);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+            20% {
+                left: 100%;
+                opacity: 0.6;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        .bottom-link {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #8b4513;
+            text-shadow: 0 2px 6px rgba(139, 69, 19, 0.15);
+            letter-spacing: 1px;
+            z-index: 100;
+            text-decoration: none;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            transition: all 0.4s ease;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .bottom-link:hover {
+            color: #a0522d;
+            text-shadow: 0 3px 10px rgba(139, 69, 19, 0.3);
+            transform: translateX(-50%) translateY(-3px);
+            background: rgba(255, 248, 220, 0.3);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+                letter-spacing: 1px;
+            }
+
+            .header p {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+
+            .memory-card {
+                width: 250px;
+                height: 330px;
+                border: 6px solid rgba(255, 248, 220, 0.95);
+            }
+
+            .gallery {
+                gap: 1rem;
+                padding-left: 15px;
+            }
+
+            .gallery-container {
+                min-height: 470px;
+                padding: 55px 0 55px 25px;
+            }
+
+            .btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .memory-caption {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+
+            .navigation-buttons {
+                margin-top: 2rem;
+            }
+
+            .bottom-link {
+                font-size: 1.3rem;
+                bottom: 20px;
+            }
+
+            .audio-controls {
+                bottom: 70px;
+                right: 15px;
+                padding: 8px 12px;
+            }
+
+            .audio-controls button {
+                font-size: 1.2rem;
+            }
+
+            .audio-controls input {
+                width: 70px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .memory-lane-container {
+                padding: 1rem;
+            }
+
+            .header {
+                margin-bottom: 2rem;
+                margin-top: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+            }
+
+            .memory-card {
+                width: 220px;
+                height: 300px;
+                border: 5px solid rgba(255, 248, 220, 0.95);
+            }
+
+            .gallery {
+                padding-left: 10px;
+                gap: 0.8rem;
+            }
+
+            .gallery-container {
+                min-height: 430px;
+                padding: 50px 0 50px 20px;
+            }
+
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+                margin-top: 1.5rem;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                padding: 0.8rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .memory-caption {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+            }
+
+            .card-sticker {
+                width: 35px;
+                height: 35px;
+            }
+
+            .slideshow-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .bottom-link {
+                font-size: 1.1rem;
+                bottom: 15px;
+                padding: 8px 15px;
+            }
+
+            .audio-controls {
+                bottom: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+
+    <div class="memory-lane-container">
+        <div class="header">
+            <h1>भजन प्रस्तोता</h1>
+        </div>
+
+        <div class="slideshow-controls">
+            <button id="startSlideshow" class="btn">
+                <span>▶ स्लाइडशो शुरू करें</span>
+            </button>
+            <button id="pauseSlideshow" class="btn" style="display: none;">
+                <span>⏸ स्लाइडशो रोकें</span>
+            </button>
+        </div>
+
+        <div class="gallery-container">
+            <div class="gallery" id="memoryGallery">
+                <!-- Images will be dynamically loaded here from JavaScript -->
+            </div>
+        </div>
+
+        <a href="index.html" class="bottom-link">HOME PAGE</a>
+    </div>
+
+    <div class="audio-controls">
+        <button id="play-pause">▶️</button>
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
+    </div>
+
+    <audio id="birthday-song" loop>
+        <source src="ytmp3free (mp3cut.net) (1).mp3" type="audio/mp3">
+    </audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+
+    <script>
+        // Audio controls (from letter.html)
+        const audio = document.getElementById('birthday-song');
+        const playPauseBtn = document.getElementById('play-pause');
+        const volumeControl = document.getElementById('volume');
+        let isPlaying = false;
+
+        audio.volume = volumeControl.value;
+
+        // Auto-play audio on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    playPauseBtn.textContent = '⏸️';
+                }).catch(() => {});
+            }, 500);
+        });
+
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                playPauseBtn.textContent = '▶️';
+            } else {
+                audio.play();
+                playPauseBtn.textContent = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        volumeControl.addEventListener('input', () => {
+            audio.volume = volumeControl.value;
+        });
+
+        // Register ScrollTrigger plugin
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Memory data
+        const memories = [
+            {
+                image: "pic3.jpeg",
+                caption: "लक्ष्मी कांत खंडेलवाल",
+                isGif: false,
+                rotationAngle: -2,
+                emoji: "💐"
+            },
+            {
+                image: "pic1.jpeg",
+                caption: "राज राठौर",
+                isGif: false,
+                rotationAngle: 3,
+                emoji: "💐"
+            },
+            {
+                image: "pic4.jpeg",
+                caption: "मनोज शर्मा",
+                isGif: true,
+                rotationAngle: -1,
+                emoji: "💐"
+            },
+            {
+                image: "pic2.jpeg",
+                caption: "सागर शर्मा",
+                isGif: false,
+                rotationAngle: 2,
+                emoji: "💐"
+            },
+            {
+                image: "pic10.jpeg",
+                caption: "आदित्य छीपा",
+                isGif: false,
+                rotationAngle: -3,
+                emoji: "💐"
+            },
+            {
+                image: "pic5.jpeg",
+                caption: "पियूष शर्मा",
+                isGif: true,
+                rotationAngle: 1,
+                emoji: "💐"
+            },
+            {
+                image: "pic7.jpeg",
+                caption: "सोमेश जैन",
+                isGif: true,
+                rotationAngle: 3,
+                emoji: "💐"
+            }
+        ];
+
+        // Create spiritual floating particles
+        function createSpiritualParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particles = ['✨', '🕉️', '🪷', '⭐'];
+            
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                    particle.style.position = 'absolute';
+                    particle.style.left = Math.random() * 100 + 'vw';
+                    particle.style.top = '-30px';
+                    particle.style.fontSize = Math.random() * 15 + 10 + 'px';
+                    particle.style.opacity = Math.random() * 0.4 + 0.2;
+                    particlesContainer.appendChild(particle);
+
+                    gsap.to(particle, {
+                        y: window.innerHeight + 50,
+                        x: Math.random() * 100 - 50,
+                        rotation: Math.random() * 180,
+                        duration: Math.random() * 10 + 8,
+                        ease: 'linear',
+                        onComplete: () => particle.remove()
+                    });
+                }, i * 300);
+            }
+
+            // Repeat particles
+            setInterval(() => {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                        particle.style.position = 'absolute';
+                        particle.style.left = Math.random() * 100 + 'vw';
+                        particle.style.top = '-30px';
+                        particle.style.fontSize = Math.random() * 15 + 10 + 'px';
+                        particle.style.opacity = Math.random() * 0.4 + 0.2;
+                        particlesContainer.appendChild(particle);
+
+                        gsap.to(particle, {
+                            y: window.innerHeight + 50,
+                            x: Math.random() * 100 - 50,
+                            rotation: Math.random() * 180,
+                            duration: Math.random() * 10 + 8,
+                            ease: 'linear',
+                            onComplete: () => particle.remove()
+                        });
+                    }, i * 300);
+                }
+            }, 8000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start spiritual particles
+            createSpiritualParticles();
+            
+            const galleryElement = document.getElementById('memoryGallery');
+            const startSlideshowBtn = document.getElementById('startSlideshow');
+            const pauseSlideshowBtn = document.getElementById('pauseSlideshow');
+            
+            let slideshowInterval;
+            let currentSlide = 0;
+
+            // Generate memory cards
+            memories.forEach((memory, index) => {
+                const memoryCard = document.createElement('div');
+                memoryCard.className = 'memory-card';
+                memoryCard.style.setProperty('--rotate', `${memory.rotationAngle}deg`);
+                
+                const tapeElement = document.createElement('div');
+                tapeElement.className = 'card-tape';
+                tapeElement.style.setProperty('--rotate', `${memory.rotationAngle * 2}deg`);
+                
+                const imgElement = document.createElement('img');
+                imgElement.className = 'memory-img';
+                imgElement.src = memory.image;
+                imgElement.alt = `Memory ${index + 1}`;
+                
+                const captionElement = document.createElement('div');
+                captionElement.className = 'memory-caption';
+                captionElement.textContent = memory.caption;
+                
+                const stickerElement = document.createElement('div');
+                stickerElement.className = 'card-sticker';
+                stickerElement.innerHTML = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="50" fill="#8b4513" />
+                    <text x="50" y="65" font-family="Arial" font-size="40" text-anchor="middle" fill="white">${memory.emoji}</text>
+                </svg>`;
+                
+                memoryCard.appendChild(tapeElement);
+                memoryCard.appendChild(imgElement);
+                memoryCard.appendChild(captionElement);
+                memoryCard.appendChild(stickerElement);
+                galleryElement.appendChild(memoryCard);
+            });
+
+            // Make slideshow controls visible
+            document.querySelector('.slideshow-controls').style.opacity = '1';
+
+            // Intersection Observer to animate cards
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            // Observe all memory cards
+            document.querySelectorAll('.memory-card').forEach(card => {
+                observer.observe(card);
+                
+                const index = Array.from(galleryElement.children).indexOf(card);
+                card.style.animationDelay = `${0.1 * index}s`;
+                
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, 500 + (index * 150));
+            });
+
+            // Slideshow functionality
+            function startSlideshow() {
+                startSlideshowBtn.style.display = 'none';
+                pauseSlideshowBtn.style.display = 'flex';
+                
+                if (slideshowInterval) {
+                    clearInterval(slideshowInterval);
+                }
+                
+                slideshowInterval = setInterval(() => {
+                    currentSlide = (currentSlide + 1) % memories.length;
+                    
+                    const cards = galleryElement.querySelectorAll('.memory-card');
+                    if (cards && cards.length > 0 && cards[currentSlide]) {
+                        const cardRect = cards[currentSlide].getBoundingClientRect();
+                        const galleryRect = galleryElement.getBoundingClientRect();
+                        
+                        galleryElement.scrollTo({
+                            left: cards[currentSlide].offsetLeft - (galleryRect.width / 2) + (cardRect.width / 2),
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 2000); // Change slide every 2 seconds
+            }
+
+            function pauseSlideshow() {
+                pauseSlideshowBtn.style.display = 'none';
+                startSlideshowBtn.style.display = 'flex';
+                
+                if (slideshowInterval) {
+                    clearInterval(slideshowInterval);
+                    slideshowInterval = null;
+                }
+            }
+
+            // Event listeners
+            startSlideshowBtn.addEventListener('click', startSlideshow);
+            pauseSlideshowBtn.addEventListener('click', pauseSlideshow);
+
+            // GSAP animations
+            gsap.from('.header', {
+                duration: 1,
+                y: -50,
+                opacity: 0,
+                ease: 'back.out(1.7)'
+            });
+
+            // Auto scroll
+            setTimeout(() => {
+                const galleryContainer = document.querySelector('.gallery-container');
+                galleryContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
