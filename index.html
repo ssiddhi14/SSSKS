@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHREE SHYAMSEWAK AKLYAN SANG</title>
+    <title>SHREE SHYAMSEWAK KALYAN SANG</title>
     <style>
         * {
             margin: 0;
@@ -26,7 +26,7 @@
         .spiritual-heading {
             position: fixed;
             top: 30px;
-            left: 50%;
+            left: 50%;  
             transform: translateX(-50%);
             font-size: 2.5rem;
             font-weight: 600;
@@ -409,23 +409,12 @@
         const volumeControl = document.getElementById('volume');
         let isPlaying = false;
 
-        // Continuous Music System - Save state before leaving page
-        function saveAudioState() {
-            if (audio && !audio.paused) {
-                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
-                localStorage.setItem('musicIsPlaying', 'true');
-                localStorage.setItem('musicVolume', audio.volume.toString());
-            } else if (audio) {
-                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
-                localStorage.setItem('musicIsPlaying', 'false');
-                localStorage.setItem('musicVolume', audio.volume.toString());
-            }
-        }
+        // INDEX PAGE: Always start audio from beginning
+        // Clear any saved time for index page
+        localStorage.removeItem('musicCurrentTime');
 
-        // Load saved audio state
-        function loadAudioState() {
-            const savedTime = localStorage.getItem('musicCurrentTime');
-            const savedIsPlaying = localStorage.getItem('musicIsPlaying');
+        // Load only volume setting
+        function loadAudioSettings() {
             const savedVolume = localStorage.getItem('musicVolume');
 
             if (savedVolume !== null) {
@@ -435,24 +424,20 @@
                 audio.volume = 0.5;
             }
 
-            if (savedTime !== null) {
-                audio.currentTime = parseFloat(savedTime);
-            }
-
-            if (savedIsPlaying === 'true') {
-                audio.play().then(() => {
-                    isPlaying = true;
-                    playPauseBtn.textContent = '⏸️';
-                }).catch(() => {});
-            }
+            // Always start from beginning on index page
+            audio.currentTime = 0;
         }
 
-        // Save state periodically while playing
-        setInterval(() => {
+        // Save state before navigation (but not current time for index page)
+        function saveAudioState() {
             if (audio && !audio.paused) {
-                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
+                localStorage.setItem('musicIsPlaying', 'true');
+                localStorage.setItem('musicVolume', audio.volume.toString());
+            } else if (audio) {
+                localStorage.setItem('musicIsPlaying', 'false');
+                localStorage.setItem('musicVolume', audio.volume.toString());
             }
-        }, 1000);
+        }
 
         // Save state before navigation
         window.addEventListener('beforeunload', saveAudioState);
@@ -477,38 +462,58 @@
             // Start typewriter effect
             setTimeout(typeWriter, 500);
 
-            // Load saved audio state or start fresh
-            const savedIsPlaying = localStorage.getItem('musicIsPlaying');
-            if (savedIsPlaying !== null) {
-                loadAudioState();
+            // Load volume settings
+            loadAudioSettings();
+
+            // Auto-play audio from beginning
+            setTimeout(() => {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    playPauseBtn.textContent = '⏸️';
+                    localStorage.setItem('musicIsPlaying', 'true');
+                }).catch(() => {});
+            }, 1000);
+
+            // Check if mobile device
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+                // Mobile: Animate photos with proper spacing
+                // Photo 1: Right side with more inward position
+                gsap.to('#photo1Container', {
+                    left: '85%',
+                    duration: 2.5,
+                    ease: 'power2.out',
+                    delay: 1.5,
+                    transform: 'translate(-50%, -50%)'
+                });
+
+                // Photo 2: Left side with more inward position
+                gsap.to('#photo2Container', {
+                    left: '15%',
+                    duration: 2.5,
+                    ease: 'power2.out',
+                    delay: 2,
+                    transform: 'translate(-50%, -50%)'
+                });
             } else {
-                // First time - play audio
-                setTimeout(() => {
-                    audio.play().then(() => {
-                        isPlaying = true;
-                        playPauseBtn.textContent = '⏸️';
-                        localStorage.setItem('musicIsPlaying', 'true');
-                    }).catch(() => {});
-                }, 1000);
+                // Desktop: Original positions
+                gsap.to('#photo1Container', {
+                    left: '75%',
+                    duration: 2.5,
+                    ease: 'power2.out',
+                    delay: 1.5,
+                    transform: 'translate(-50%, -50%)'
+                });
+
+                gsap.to('#photo2Container', {
+                    left: '25%',
+                    duration: 2.5,
+                    ease: 'power2.out',
+                    delay: 2,
+                    transform: 'translate(-50%, -50%)'
+                });
             }
-
-            // Animate photo 1: from left to 75% of page width
-            gsap.to('#photo1Container', {
-                left: '75%',
-                duration: 2.5,
-                ease: 'power2.out',
-                delay: 1.5,
-                transform: 'translate(-50%, -50%)'
-            });
-
-            // Animate photo 2: from left to 25% of page width
-            gsap.to('#photo2Container', {
-                left: '25%',
-                duration: 2.5,
-                ease: 'power2.out',
-                delay: 2,
-                transform: 'translate(-50%, -50%)'
-            });
 
             // Fade in photo 3 (center image)
             gsap.to('#photo3Container', {
