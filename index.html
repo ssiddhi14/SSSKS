@@ -409,14 +409,30 @@
         const volumeControl = document.getElementById('volume');
         let isPlaying = false;
 
-        // INDEX PAGE: Always start audio from beginning
-        // Clear any saved time for index page
-        localStorage.removeItem('musicCurrentTime');
+        // ========================================
+        // CONTINUOUS MUSIC SYSTEM - INDEX PAGE
+        // ========================================
+        
+        // Save audio state continuously while playing
+        function saveAudioState() {
+            if (audio && !audio.paused) {
+                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
+                localStorage.setItem('musicIsPlaying', 'true');
+                localStorage.setItem('musicVolume', audio.volume.toString());
+            } else if (audio) {
+                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
+                localStorage.setItem('musicIsPlaying', 'false');
+                localStorage.setItem('musicVolume', audio.volume.toString());
+            }
+        }
 
-        // Load only volume setting
-        function loadAudioSettings() {
+        // Load saved audio state from localStorage
+        function loadAudioState() {
+            const savedTime = localStorage.getItem('musicCurrentTime');
+            const savedIsPlaying = localStorage.getItem('musicIsPlaying');
             const savedVolume = localStorage.getItem('musicVolume');
 
+            // Set volume
             if (savedVolume !== null) {
                 audio.volume = parseFloat(savedVolume);
                 volumeControl.value = savedVolume;
@@ -424,24 +440,39 @@
                 audio.volume = 0.5;
             }
 
-            // Always start from beginning on index page
-            audio.currentTime = 0;
-        }
+            // Set current time if available
+            if (savedTime !== null) {
+                audio.currentTime = parseFloat(savedTime);
+            }
 
-        // Save state before navigation (but not current time for index page)
-        function saveAudioState() {
-            if (audio && !audio.paused) {
-                localStorage.setItem('musicIsPlaying', 'true');
-                localStorage.setItem('musicVolume', audio.volume.toString());
-            } else if (audio) {
-                localStorage.setItem('musicIsPlaying', 'false');
-                localStorage.setItem('musicVolume', audio.volume.toString());
+            // Resume playing if it was playing before
+            if (savedIsPlaying === 'true') {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    playPauseBtn.textContent = '⏸️';
+                }).catch(() => {
+                    // Autoplay might be blocked, show play button
+                    isPlaying = false;
+                    playPauseBtn.textContent = '▶️';
+                });
             }
         }
 
-        // Save state before navigation
+        // Save state periodically (every 500ms) while playing
+        setInterval(() => {
+            if (audio && !audio.paused) {
+                localStorage.setItem('musicCurrentTime', audio.currentTime.toString());
+            }
+        }, 500);
+
+        // Save state before leaving page
         window.addEventListener('beforeunload', saveAudioState);
-        document.querySelector('.bottom-link').addEventListener('click', saveAudioState);
+        
+        // Save state before navigation via link
+        document.querySelector('.bottom-link').addEventListener('click', function(e) {
+            saveAudioState();
+            // Don't prevent default - allow normal navigation
+        });
 
         // Typewriter effect
         const heading = document.getElementById('spiritualHeading');
@@ -462,24 +493,34 @@
             // Start typewriter effect
             setTimeout(typeWriter, 500);
 
-            // Load volume settings
-            loadAudioSettings();
+            // Check if returning from another page or first visit
+            const savedIsPlaying = localStorage.getItem('musicIsPlaying');
+            const savedTime = localStorage.getItem('musicCurrentTime');
 
-            // Auto-play audio from beginning
-            setTimeout(() => {
-                audio.play().then(() => {
-                    isPlaying = true;
-                    playPauseBtn.textContent = '⏸️';
-                    localStorage.setItem('musicIsPlaying', 'true');
-                }).catch(() => {});
-            }, 1000);
+            if (savedTime !== null && parseFloat(savedTime) > 0) {
+                // Returning visitor - resume music from saved position
+                loadAudioState();
+            } else {
+                // First time visitor - start music from beginning after delay
+                setTimeout(() => {
+                    audio.currentTime = 0;
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        playPauseBtn.textContent = '⏸️';
+                        localStorage.setItem('musicIsPlaying', 'true');
+                    }).catch(() => {
+                        // Autoplay blocked
+                        isPlaying = false;
+                        playPauseBtn.textContent = '▶️';
+                    });
+                }, 1000);
+            }
 
             // Check if mobile device
             const isMobile = window.innerWidth <= 768;
 
             if (isMobile) {
                 // Mobile: Animate photos with proper spacing
-                // Photo 1: Right side with more inward position
                 gsap.to('#photo1Container', {
                     left: '85%',
                     duration: 2.5,
@@ -488,7 +529,6 @@
                     transform: 'translate(-50%, -50%)'
                 });
 
-                // Photo 2: Left side with more inward position
                 gsap.to('#photo2Container', {
                     left: '15%',
                     duration: 2.5,
@@ -527,6 +567,7 @@
             createSpiritualParticles();
         });
 
+        // Play/Pause button control
         playPauseBtn.addEventListener('click', () => {
             if (isPlaying) {
                 audio.pause();
@@ -540,6 +581,7 @@
             isPlaying = !isPlaying;
         });
 
+        // Volume control
         volumeControl.addEventListener('input', () => {
             audio.volume = volumeControl.value;
             localStorage.setItem('musicVolume', volumeControl.value);
