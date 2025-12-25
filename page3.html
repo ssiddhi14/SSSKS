@@ -238,9 +238,11 @@
                 padding: 100px 15px 90px;
             }
 
+            /* FIXED: Heading stays at top only - not fixed anymore on mobile */
             .spiritual-heading {
-                font-size: 1.8rem;
+                position: absolute;
                 top: 20px;
+                font-size: 1.8rem;
                 padding: 0 10px;
                 text-align: center;
                 letter-spacing: 2px;
@@ -278,14 +280,25 @@
                 font-size: 1.2rem;
             }
 
+            /* FIXED: Next button appears only at bottom - not fixed anymore on mobile */
             .next-page-link {
+                position: relative;
                 font-size: 1.4rem;
-                bottom: 20px;
+                bottom: auto;
+                left: auto;
+                transform: none;
                 padding: 8px 15px;
+                display: block;
+                margin: 50px auto 0;
+                width: fit-content;
+            }
+
+            .next-page-link:hover {
+                transform: translateY(-3px);
             }
 
             .audio-controls {
-                bottom: 70px;
+                bottom: 15px;
                 right: 15px;
                 padding: 8px 12px;
             }
@@ -304,7 +317,9 @@
                 padding: 90px 10px 80px;
             }
 
+            /* FIXED: Heading stays at top only on small mobile */
             .spiritual-heading {
+                position: absolute;
                 font-size: 1.3rem;
                 letter-spacing: 1px;
             }
@@ -343,14 +358,24 @@
                 font-size: 1rem;
             }
 
+            /* FIXED: Next button appears only at bottom on small mobile */
             .next-page-link {
+                position: relative;
                 font-size: 1.2rem;
-                bottom: 15px;
+                bottom: auto;
+                left: auto;
+                transform: none;
                 padding: 6px 12px;
+                display: block;
+                margin: 40px auto 0;
+            }
+
+            .next-page-link:hover {
+                transform: translateY(-3px);
             }
 
             .audio-controls {
-                bottom: 60px;
+                bottom: 15px;
             }
         }
     </style>
@@ -550,4 +575,3 @@
 </body>
 
 </html>
-
