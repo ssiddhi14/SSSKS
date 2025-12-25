@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHREE SHYAMSEWAK KALYAN SANGH</title>
+    <title>SHREE SHYAMSEWAK KALYAN SANG</title>
     <style>
         * {
             margin: 0;
@@ -389,13 +389,14 @@
         </div>
     </div>
 
-    <a href="letter.html" class="bottom-link">56वां वार्षिक उत्सव
+    <a href="page2.html" class="bottom-link">56वां वार्षिक उत्सव
     <br>    (click here)  
     </a>
 
     <div class="audio-controls">
         <button id="play-pause">▶️</button>
-        <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
+        <!-- Volume slider: value="1" means 100% (full volume) -->
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
     </div>
 
     <audio id="birthday-song" loop>
@@ -437,7 +438,7 @@
                 audio.volume = parseFloat(savedVolume);
                 volumeControl.value = savedVolume;
             } else {
-                audio.volume = 0.5;
+                audio.volume = 1.0; // Default volume: 1.0 = 100% (full volume)
             }
 
             // Set current time if available
@@ -493,28 +494,34 @@
             // Start typewriter effect
             setTimeout(typeWriter, 500);
 
-            // Check if returning from another page or first visit
-            const savedIsPlaying = localStorage.getItem('musicIsPlaying');
-            const savedTime = localStorage.getItem('musicCurrentTime');
-
-            if (savedTime !== null && parseFloat(savedTime) > 0) {
-                // Returning visitor - resume music from saved position
-                loadAudioState();
-            } else {
-                // First time visitor - start music from beginning after delay
-                setTimeout(() => {
-                    audio.currentTime = 0;
-                    audio.play().then(() => {
-                        isPlaying = true;
-                        playPauseBtn.textContent = '⏸️';
-                        localStorage.setItem('musicIsPlaying', 'true');
-                    }).catch(() => {
-                        // Autoplay blocked
-                        isPlaying = false;
-                        playPauseBtn.textContent = '▶️';
-                    });
-                }, 1000);
-            }
+            // ALWAYS start music on index.html after 0.1 seconds
+            setTimeout(() => {
+                // Check if there's saved state from previous session
+                const savedTime = localStorage.getItem('musicCurrentTime');
+                const savedVolume = localStorage.getItem('musicVolume');
+                
+                // Set volume
+                if (savedVolume !== null) {
+                    audio.volume = parseFloat(savedVolume);
+                    volumeControl.value = savedVolume;
+                } else {
+                    audio.volume = 1.0; // Default volume: 1.0 = 100% (full volume)
+                    volumeControl.value = 1.0;
+                }
+                
+                // Always start from beginning on index.html
+                audio.currentTime = 0;
+                audio.play().then(() => {
+                    isPlaying = true;
+                    playPauseBtn.textContent = '⏸️';
+                    localStorage.setItem('musicIsPlaying', 'true');
+                    localStorage.setItem('musicCurrentTime', '0');
+                }).catch(() => {
+                    // Autoplay blocked
+                    isPlaying = false;
+                    playPauseBtn.textContent = '▶️';
+                });
+            }, 100); // 100 milliseconds = 0.1 seconds delay before autoplay
 
             // Check if mobile device
             const isMobile = window.innerWidth <= 768;
@@ -641,4 +648,3 @@
     </script>
 </body>
 </html>
-
