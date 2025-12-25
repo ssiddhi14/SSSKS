@@ -403,24 +403,13 @@
                 margin-top: 2rem;
             }
 
-            /* FIXED: Home page link appears only at bottom - not fixed anymore on mobile */
             .bottom-link {
-                position: relative;
                 font-size: 1.3rem;
-                bottom: auto;
-                left: auto;
-                transform: none;
-                display: block;
-                margin: 50px auto 0;
-                width: fit-content;
-            }
-
-            .bottom-link:hover {
-                transform: translateY(-3px);
+                bottom: 20px;
             }
 
             .audio-controls {
-                bottom: 15px;
+                bottom: 70px;
                 right: 15px;
                 padding: 8px 12px;
             }
@@ -498,24 +487,14 @@
                 gap: 0.5rem;
             }
 
-            /* FIXED: Home page link appears only at bottom on small mobile */
             .bottom-link {
-                position: relative;
                 font-size: 1.1rem;
-                bottom: auto;
-                left: auto;
-                transform: none;
+                bottom: 15px;
                 padding: 8px 15px;
-                display: block;
-                margin: 40px auto 0;
-            }
-
-            .bottom-link:hover {
-                transform: translateY(-3px);
             }
 
             .audio-controls {
-                bottom: 15px;
+                bottom: 60px;
             }
         }
     </style>
@@ -804,7 +783,7 @@
                     slideshowInterval = null;
                 }
             }
-
+            
             // Event listeners
             startSlideshowBtn.addEventListener('click', startSlideshow);
             pauseSlideshowBtn.addEventListener('click', pauseSlideshow);
