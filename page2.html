@@ -129,23 +129,29 @@
             border-radius: 50px;
             display: flex;
             align-items: center;
+            gap: 10px;
             z-index: 100;
             box-shadow: 0 2px 15px rgba(139, 69, 19, 0.2);
         }
 
         .audio-controls button {
-            background: none;
+            background: #8b4513;
             border: none;
-            font-size: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
-            color: #8b4513;
-            margin-right: 10px;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 25px;
             transition: all 0.3s ease;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            white-space: nowrap;
         }
 
         .audio-controls button:hover {
-            transform: scale(1.15);
-            color: #a0522d;
+            transform: scale(1.05);
+            background: #a0522d;
+            box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
         }
 
         .audio-controls input {
@@ -214,14 +220,17 @@
                 bottom: 70px;
                 right: 15px;
                 padding: 8px 12px;
+                flex-direction: column;
+                gap: 8px;
             }
 
             .audio-controls button {
-                font-size: 1.2rem;
+                font-size: 0.75rem;
+                padding: 6px 12px;
             }
 
             .audio-controls input {
-                width: 70px;
+                width: 80px;
             }
         }
 
@@ -259,6 +268,11 @@
             .audio-controls {
                 bottom: 60px;
             }
+
+            .audio-controls button {
+                font-size: 0.7rem;
+                padding: 5px 10px;
+            }
         }
     </style>
 </head>
@@ -294,7 +308,7 @@
     <a href="page3.html" class="next-page-link">Next Page</a>
 
     <div class="audio-controls">
-        <button id="play-pause">▶️</button>
+        <button id="play-pause">Play Music</button>
         <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
     </div>
 
@@ -342,7 +356,7 @@
             if (savedIsPlaying === 'true') {
                 audio.play().then(() => {
                     isPlaying = true;
-                    playPauseBtn.textContent = '⏸️';
+                    playPauseBtn.textContent = 'Pause Music';
                 }).catch(() => {});
             }
         }
@@ -434,11 +448,11 @@
         playPauseBtn.addEventListener('click', () => {
             if (isPlaying) {
                 audio.pause();
-                playPauseBtn.textContent = '▶️';
+                playPauseBtn.textContent = 'Play Music';
                 localStorage.setItem('musicIsPlaying', 'false');
             } else {
                 audio.play();
-                playPauseBtn.textContent = '⏸️';
+                playPauseBtn.textContent = 'Pause Music';
                 localStorage.setItem('musicIsPlaying', 'true');
             }
             isPlaying = !isPlaying;
