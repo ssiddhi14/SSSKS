@@ -129,7 +129,6 @@
             border-radius: 50px;
             display: flex;
             align-items: center;
-            gap: 10px;
             z-index: 100;
             box-shadow: 0 2px 15px rgba(139, 69, 19, 0.2);
         }
@@ -152,11 +151,6 @@
             transform: scale(1.05);
             background: #a0522d;
             box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
-        }
-
-        .audio-controls input {
-            width: 100px;
-            accent-color: #8b4513;
         }
 
         .floating-particles {
@@ -309,7 +303,6 @@
 
     <div class="audio-controls">
         <button id="play-pause">Play Music</button>
-        <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
     </div>
 
     <audio id="birthday-song" loop>
@@ -320,8 +313,10 @@
     <script>
         const audio = document.getElementById('birthday-song');
         const playPauseBtn = document.getElementById('play-pause');
-        const volumeControl = document.getElementById('volume');
         let isPlaying = false;
+
+        // Set default volume
+        audio.volume = 0.5;
 
         // Continuous Music System - Save state before leaving page
         function saveAudioState() {
@@ -344,7 +339,6 @@
 
             if (savedVolume !== null) {
                 audio.volume = parseFloat(savedVolume);
-                volumeControl.value = savedVolume;
             } else {
                 audio.volume = 0.5;
             }
@@ -456,11 +450,6 @@
                 localStorage.setItem('musicIsPlaying', 'true');
             }
             isPlaying = !isPlaying;
-        });
-
-        volumeControl.addEventListener('input', () => {
-            audio.volume = volumeControl.value;
-            localStorage.setItem('musicVolume', volumeControl.value);
         });
 
         function createSpiritualParticles() {
