@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHREE SHYAMSEWAK KALYAN SANGH</title>
+    <title>SHREE SHYAMSEWAK KALYAN SANG</title>
     <style>
         * {
             margin: 0;
@@ -197,7 +197,6 @@
             border-radius: 50px;
             display: flex;
             align-items: center;
-            gap: 10px;
             z-index: 100;
             box-shadow: 0 2px 15px rgba(139, 69, 19, 0.2);
         }
@@ -220,11 +219,6 @@
             transform: scale(1.05);
             background: #a0522d;
             box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
-        }
-
-        .audio-controls input {
-            width: 100px;
-            accent-color: #8b4513;
         }
 
         .floating-particles {
@@ -409,7 +403,6 @@
 
     <div class="audio-controls">
         <button id="play-pause">Play Music</button>
-        <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
     </div>
 
     <audio id="birthday-song" loop>
@@ -420,7 +413,6 @@
     <script>
         const audio = document.getElementById('birthday-song');
         const playPauseBtn = document.getElementById('play-pause');
-        const volumeControl = document.getElementById('volume');
         let isPlaying = false;
 
         // ========================================
@@ -449,7 +441,6 @@
             // Set volume
             if (savedVolume !== null) {
                 audio.volume = parseFloat(savedVolume);
-                volumeControl.value = savedVolume;
             } else {
                 audio.volume = 1.0; // Default volume: 1.0 = 100% (full volume)
             }
@@ -517,10 +508,8 @@
                 // Set volume
                 if (savedVolume !== null) {
                     audio.volume = parseFloat(savedVolume);
-                    volumeControl.value = savedVolume;
                 } else {
                     audio.volume = 1.0; // Default volume: 1.0 = 100% (full volume)
-                    volumeControl.value = 1.0;
                 }
                 
                 // Always start from beginning on index.html
@@ -631,12 +620,6 @@
             isPlaying = !isPlaying;
         });
 
-        // Volume control
-        volumeControl.addEventListener('input', () => {
-            audio.volume = volumeControl.value;
-            localStorage.setItem('musicVolume', volumeControl.value);
-        });
-
         function createSpiritualParticles() {
             const particlesContainer = document.getElementById('particles');
             const particles = ['✨', '🕉️', '🪷', '⭐'];
@@ -691,4 +674,3 @@
     </script>
 </body>
 </html>
-
