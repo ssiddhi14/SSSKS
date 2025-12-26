@@ -518,9 +518,10 @@
                     localStorage.setItem('musicIsPlaying', 'true');
                     localStorage.setItem('musicCurrentTime', '0');
                 }).catch(() => {
-                    // Autoplay blocked
+                    // Autoplay blocked - setup mobile touch handler
                     isPlaying = false;
                     playPauseBtn.textContent = '▶️';
+                    setupMobileTouchHandler();
                 });
             }, 100); // 100 milliseconds = 0.1 seconds delay before autoplay
 
@@ -573,6 +574,27 @@
 
             // Create floating spiritual particles
             createSpiritualParticles();
+        }
+
+        // Setup mobile touch handler for autoplay (when autoplay is blocked)
+        function setupMobileTouchHandler() {
+            function playOnTouch() {
+                if (!isPlaying) {
+                    audio.currentTime = 0;
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        playPauseBtn.textContent = '⏸️';
+                        localStorage.setItem('musicIsPlaying', 'true');
+                        localStorage.setItem('musicCurrentTime', '0');
+                        // Remove listeners after first play
+                        document.removeEventListener('touchstart', playOnTouch);
+                        document.removeEventListener('click', playOnTouch);
+                    });
+                }
+            }
+            // Listen for any touch or click to start music
+            document.addEventListener('touchstart', playOnTouch, { once: true });
+            document.addEventListener('click', playOnTouch, { once: true });
         }
 
         // Listen to both events to ensure page loads properly
